@@ -2,6 +2,15 @@ import express from "express";
 import cors from "cors";
 import chalk from "chalk";
 
+function validURL(str) {
+  if (str != null && str != "") {
+    const regex =
+      /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+    return regex.test(str);
+  }
+  return false;
+}
+
 let users = [];
 let tweets = [
   {
@@ -18,8 +27,17 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/sign-up", (req, res) => {
-  users.push(req.body);
-  res.send("OK");
+  const { username, avatar } = req.body;
+  if (username.length !== 0 && avatar.length !== 0) {
+    if (validURL(avatar)) {
+      users.push(req.body);
+      res.send("OK");
+    } else {
+      res.status(400).send("Adicione um link válido para a imagem!");
+    }
+  } else {
+    res.status(400).send("Todos os campos são obrigatórios!");
+  }
 });
 
 app.get("/tweets", (req, res) => {
@@ -31,14 +49,14 @@ app.get("/tweets", (req, res) => {
 });
 
 app.post("/tweets", (req, res) => {
-  const tweetData = req.body;
-  const user = users.find((user) => user.username === tweetData.username);
+  const { username, tweet } = req.body;
+  const user = users.find((user) => user.username === username);
   tweets.push({
-    username: user.username,
+    username,
     avatar: user.avatar,
-    tweet: tweetData.tweet,
+    tweet,
   });
-  res.send("OK");
+  res.status(201).send("OK");
 });
 
 app.listen("5000", () => console.log(chalk.bold.green("API running...")));
