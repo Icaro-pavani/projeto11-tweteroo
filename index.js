@@ -48,6 +48,12 @@ app.get("/tweets", (req, res) => {
   }
 });
 
+app.get("/tweets/:userId", (req, res) => {
+  const { userId } = req.params;
+  const userTweets = tweets.filter((tweet) => tweet.username === userId);
+  res.send(userTweets);
+});
+
 app.post("/tweets", (req, res) => {
   const { tweet } = req.body;
   const { user } = req.headers;
