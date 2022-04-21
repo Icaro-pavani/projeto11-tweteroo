@@ -1,0 +1,29 @@
+{
+  "name": "projeto11-tweteroo",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "## Introduction A back-end application to the tweterro app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Icaro-pavani/projeto11-tweteroo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Icaro-pavani/projeto11-tweteroo/issues"
+  },
+  "homepage": "https://github.com/Icaro-pavani/projeto11-tweteroo#readme",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
