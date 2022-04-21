@@ -49,14 +49,19 @@ app.get("/tweets", (req, res) => {
 });
 
 app.post("/tweets", (req, res) => {
-  const { username, tweet } = req.body;
-  const user = users.find((user) => user.username === username);
-  tweets.push({
-    username,
-    avatar: user.avatar,
-    tweet,
-  });
-  res.status(201).send("OK");
+  const { tweet } = req.body;
+  const { user } = req.headers;
+  if (tweet.length !== 0 && user.length !== 0) {
+    const userInfo = users.find((oneUser) => oneUser.username === user);
+    tweets.push({
+      username: user,
+      avatar: userInfo.avatar,
+      tweet,
+    });
+    res.status(201).send("OK");
+  } else {
+    res.status(400).send("Todos os campos são obrigatórios!");
+  }
 });
 
 app.listen("5000", () => console.log(chalk.bold.green("API running...")));
