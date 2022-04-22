@@ -41,10 +41,19 @@ app.post("/sign-up", (req, res) => {
 });
 
 app.get("/tweets", (req, res) => {
-  if (tweets.length > 10) {
-    res.send(tweets.slice(-10));
+  const { page } = req.query;
+  if (page > 0) {
+    if (tweets.length < 11) {
+      res.send(tweets);
+    } else {
+      const tweetsToSend = tweets.slice(
+        tweets.length - page * 10,
+        tweets.length - (page - 1) * 10
+      );
+      res.send(tweetsToSend);
+    }
   } else {
-    res.send(tweets);
+    res.status(400).send("Informe uma página válida!");
   }
 });
 
