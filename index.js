@@ -11,8 +11,8 @@ function validURL(str) {
   return false;
 }
 
-let users = [];
-let tweets = [
+const users = [];
+const tweets = [
   {
     username: "bobesponja",
     avatar:
@@ -42,15 +42,18 @@ app.post("/sign-up", (req, res) => {
 
 app.get("/tweets", (req, res) => {
   const { page } = req.query;
-  if (page > 0) {
+  if (Number(page) > 0) {
     if (tweets.length < 11) {
-      res.send(tweets);
+      const tweetsToSend = [...tweets];
+      res.send(tweetsToSend.reverse());
     } else {
-      const tweetsToSend = tweets.slice(
-        tweets.length - page * 10,
-        tweets.length - (page - 1) * 10
-      );
-      res.send(tweetsToSend);
+      let tweetsToSend = [];
+      if (Number(page) === 1) {
+        tweetsToSend = tweets.slice(-page * 10, tweets.length);
+      } else {
+        tweetsToSend = tweets.slice(-page * 10, -(page - 1) * 10);
+      }
+      res.send(tweetsToSend.reverse());
     }
   } else {
     res.status(400).send("Informe uma página válida!");
@@ -60,7 +63,7 @@ app.get("/tweets", (req, res) => {
 app.get("/tweets/:userId", (req, res) => {
   const { userId } = req.params;
   const userTweets = tweets.filter((tweet) => tweet.username === userId);
-  res.send(userTweets);
+  res.send(userTweets.reverse());
 });
 
 app.post("/tweets", (req, res) => {
